@@ -13,10 +13,9 @@
   background: linear-gradient(180deg, rgba(26, 26, 46, 0.85), rgba(17, 17, 24, 0.95));
   border: 1px solid rgba(139, 92, 246, 0.1);
   border-radius: 16px;
-  padding: 1.4rem 1.4rem 1.2rem;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
   overflow: hidden;
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
               border-color 0.3s ease,
@@ -58,65 +57,36 @@
 .project-card:hover::before { opacity: 0.18; }
 .project-card:hover::after { opacity: 1; }
 
-/* ===================== TOP ===================== */
-.card-top {
+/* ===================== BODY ===================== */
+.card-body {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.2rem 1.4rem 1.3rem;
+  flex: 1;
 }
 
-.folder-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 11px;
-  background: color-mix(in srgb, var(--lang-color) 12%, rgba(139, 92, 246, 0.08));
+.card-stats {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              background 0.3s ease;
-  flex-shrink: 0;
-}
-
-.project-card:hover .folder-icon {
-  transform: rotate(-8deg) scale(1.08);
-  background: color-mix(in srgb, var(--lang-color) 22%, transparent);
-}
-
-.folder-icon svg {
-  width: 100%;
-  height: 100%;
-  stroke: var(--lang-color);
-  fill: none;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--lang-color) 35%, transparent));
-}
-
-.card-stats-top {
-  display: flex;
-  gap: 10px;
+  gap: 12px;
   font-size: 0.78rem;
   color: var(--text-muted);
   font-weight: 500;
 }
 
-.card-stats-top .stat {
+.card-stats .stat {
   display: inline-flex;
   align-items: center;
   gap: 4px;
 }
 
-.card-stats-top .ico {
+.card-stats .ico {
   display: inline-flex;
   width: 14px;
   height: 14px;
 }
 
-.card-stats-top svg {
+.card-stats svg {
   width: 100%;
   height: 100%;
   stroke: var(--text-muted);
@@ -179,24 +149,205 @@
   50% { opacity: 0.55; transform: scale(0.85); }
 }
 
+/* ===================== HEADER (mockup de navegador) ===================== */
+.browser-mock {
+  border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.b-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  flex-shrink: 0;
+}
+
+.b-dot:nth-child(1) { background: #ff5f57; }
+.b-dot:nth-child(2) { background: #febc2e; }
+.b-dot:nth-child(3) { background: #28c840; }
+
+.browser-url {
+  margin-left: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 7px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.browser-url svg {
+  width: 11px;
+  height: 11px;
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+/* Área de "preview" con degradado de la marca */
+.browser-screen {
+  position: relative;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 30% 20%, color-mix(in srgb, var(--accent) 45%, transparent), transparent 60%),
+    radial-gradient(circle at 80% 90%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 55%),
+    linear-gradient(135deg, rgba(17, 17, 24, 0.6), rgba(10, 10, 16, 0.9));
+}
+
+.browser-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(circle at center, black, transparent 75%);
+}
+
+.screen-glyph {
+  font-family: var(--font-mono);
+  font-size: 3.4rem;
+  font-weight: 800;
+  line-height: 1;
+  color: color-mix(in srgb, var(--accent) 85%, white);
+  text-shadow: 0 0 26px color-mix(in srgb, var(--accent) 60%, transparent);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-card:hover .screen-glyph {
+  transform: scale(1.12);
+}
+
+.screen-live {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.62rem;
+  padding: 3px 8px;
+  background: rgba(34, 197, 94, 0.16);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  border-radius: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+  backdrop-filter: blur(4px);
+}
+
+/* Badge de repositorio privado */
+.private-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.62rem;
+  padding: 3px 9px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: color-mix(in srgb, var(--accent) 80%, white);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.private-tag svg {
+  width: 11px;
+  height: 11px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* Botón de ancho completo en la tarjeta privada */
+.btn-action.wide {
+  width: 100%;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--accent) 85%, black),
+    color-mix(in srgb, var(--accent) 55%, black));
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.btn-action.wide:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
 /* ===================== DESC ===================== */
 .card-desc {
   font-size: 0.86rem;
   color: var(--text-secondary);
   line-height: 1.6;
   margin: 0;
-  flex: 1;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* ===================== FOOT (lang chip) ===================== */
+/* ===================== TOPICS ===================== */
+.card-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.topic-chip {
+  font-size: 0.68rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  padding: 3px 9px;
+  border-radius: 999px;
+  color: color-mix(in srgb, var(--lang-color) 75%, white);
+  background: color-mix(in srgb, var(--lang-color) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--lang-color) 22%, transparent);
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.project-card:hover .topic-chip {
+  background: color-mix(in srgb, var(--lang-color) 18%, transparent);
+  border-color: color-mix(in srgb, var(--lang-color) 38%, transparent);
+}
+
+.topic-chip.more {
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ===================== FOOT (lang chip + stats) ===================== */
 .card-foot {
   display: flex;
   align-items: center;
-  padding-top: 0.5rem;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 0.85rem;
   border-top: 1px solid rgba(139, 92, 246, 0.08);
 }
 

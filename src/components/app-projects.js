@@ -22,9 +22,37 @@ const LANG_COLORS = {
   Ruby: '#701516',
   Kotlin: '#a97bff',
   Swift: '#fa7343',
+  Astro: '#ff5d01',
 }
 
 const CACHE_TTL = 60 * 60 * 1000
+
+const PRIVATE_REPOS = [
+  {
+    name: 'ARAnet',
+    homepage: 'https://aranet.tech/',
+    description:
+      'Landing de ARANET — proveedor de internet de fibra óptica en El Pangui, Zamora Chinchipe, Ecuador. Construido con Next.js 16, React 19, TypeScript y Tailwind CSS 4.',
+    language: 'TypeScript',
+    topics: ['react', 'typescript', 'landing-page', 'nextjs', 'tailwindcss', 'framer-motion', 'vercel'],
+  },
+  {
+    name: 'acropole-fit-center',
+    homepage: 'https://acropole-fit-center.vercel.app/',
+    description:
+      'Sitio web del studio Acropole Fit Center · Pole Dance, Pole Sport y flexibilidad en Loja, Ecuador.',
+    language: 'JavaScript',
+    topics: ['react', 'i18n', 'landing-page', 'nextjs', 'css-modules'],
+  },
+  {
+    name: 'boskanacrochet',
+    homepage: 'https://boskanacrochet.vercel.app/',
+    description:
+      'Sitio web de Boskana Crochet — catálogo de amigurumis, bolsos y accesorios tejidos a mano. Construido con Astro + Tailwind.',
+    language: 'Astro',
+    topics: ['ecommerce', 'catalog', 'astro', 'tailwindcss'],
+  },
+]
 
 export class AppProjects extends RevealMixin(LitElement) {
   static get properties() {
@@ -57,12 +85,34 @@ export class AppProjects extends RevealMixin(LitElement) {
     }
   }
 
+  _privateRepos() {
+    return PRIVATE_REPOS.map((r) => {
+      let domain = r.homepage
+      try {
+        domain = new URL(r.homepage).hostname.replace(/^www\./, '')
+      } catch (e) {}
+      return {
+        name: r.name,
+        description: r.description || '',
+        html_url: '',
+        homepage: r.homepage,
+        domain,
+        language: r.language || null,
+        stars: 0,
+        forks: 0,
+        topics: r.topics || [],
+        updated: '',
+        private: true,
+      }
+    })
+  }
+
   async _fetchRepos() {
     const cacheKey = `gh_repos_${this.user}_v4`
     try {
       const cached = JSON.parse(localStorage.getItem(cacheKey) || 'null')
       if (cached && Date.now() - cached.t < CACHE_TTL && Array.isArray(cached.data)) {
-        this.repos = cached.data
+        this.repos = [...this._privateRepos(), ...cached.data]
         this.loading = false
         return
       }
@@ -99,12 +149,13 @@ export class AppProjects extends RevealMixin(LitElement) {
           if (b.stars !== a.stars) return b.stars - a.stars
           return new Date(b.updated) - new Date(a.updated)
         })
-      this.repos = filtered
+      this.repos = [...this._privateRepos(), ...filtered]
       try {
         localStorage.setItem(cacheKey, JSON.stringify({ t: Date.now(), data: filtered }))
       } catch (e) {}
     } catch (err) {
       this.error = err.message || 'fetch error'
+      this.repos = this._privateRepos()
     } finally {
       this.loading = false
     }
